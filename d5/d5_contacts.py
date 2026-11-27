@@ -1,13 +1,25 @@
 import json
 import os
 
+DATA_FILE = os.path.join(os.path.dirname(__file__), "contacts.json")
+
+def confirm(prompt):
+    while True:
+        sure = input(prompt)
+        if sure.lower() == 'y':
+            return True
+        elif sure.lower() == 'n':
+            return False
+        else:
+            print("请重新输入！")
+
 def save_contacts(contacts):
-    with open(os.path.join(os.path.dirname(__file__), "contacts.json"), "w", encoding="utf-8") as f:
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(contacts, f, ensure_ascii=False, indent=2)
 
 def load_contacts():
     try:
-        with open(os.path.join(os.path.dirname(__file__), "contacts.json"), "r", encoding="utf-8") as f:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
         return {}
@@ -15,12 +27,14 @@ def load_contacts():
 
 def add_contact(contacts):
     name = input("请输入姓名：")
+    if not name:
+        print("姓名不能为空")
+        return
     if name in contacts:
         print("⚠️", name, "已存在，当前电话：", contacts[name])
-        cover = input("是否覆盖？（y/n）")
-        if cover.lower() == 'y':
+        if confirm("是否覆盖(y/n)"):
             contacts[name] = input("请输入电话：")
-        elif cover.lower() == 'n':
+        else:
             print("已取消")
     else:
         phone = input("请输入电话：")
@@ -52,15 +66,14 @@ def select_contact(contacts):
 
 def modify_contact(contacts):
     name = input("请输入要修改人的姓名：")
-    if name not in contacts:
-        print("未找到联系人")
-    else:
+    if name in contacts:
         print(name, ",当前电话：", contacts[name])
-        modify = input("是否修改(y/n)")
-        if modify.lower() == 'y':
+        if confirm("是否修改(y/n)"):
             contacts[name] = input("请输入新电话号码：")
-        elif modify.lower() == 'n':
+        else:
             print("已取消")
+    else:
+        print("未找到联系人")
 
 contacts = load_contacts()
 
@@ -83,11 +96,8 @@ while True:
     elif choice == '5':
         modify_contact(contacts)
     elif choice == '0':
-        save = input("是否保存通讯录？（y/n）")
-        if save.lower() == 'y':
+        if confirm("是否保存通讯录？（y/n）"):
             save_contacts(contacts)
-            break
-        elif save.lower() == 'n':
-            break
+        break
     else:
         print("无效指令，请重新选择")
