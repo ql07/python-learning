@@ -50,6 +50,17 @@ def select_contact(contacts):
     if not found:
         print("未找到联系人")
 
+def modify_contact(contacts):
+    name = input("请输入要修改人的姓名：")
+    if name not in contacts:
+        print("未找到联系人")
+    else:
+        print(name, ",当前电话：", contacts[name])
+        modify = input("是否修改(y/n)")
+        if modify.lower() == 'y':
+            contacts[name] = input("请输入新电话号码：")
+        elif modify.lower() == 'n':
+            print("已取消")
 
 contacts = load_contacts()
 
@@ -58,6 +69,7 @@ while True:
     print("---------2、查看----------")
     print("---------3、删除----------")
     print("---------4、查询----------")
+    print("---------5、修改----------")
     print("---------0、退出----------")
     choice = input("输入你的选择:")
     if choice == '1':
@@ -68,6 +80,8 @@ while True:
         delete_contact(contacts)
     elif choice == '4':
         select_contact(contacts)
+    elif choice == '5':
+        modify_contact(contacts)
     elif choice == '0':
         save = input("是否保存通讯录？（y/n）")
         if save.lower() == 'y':
