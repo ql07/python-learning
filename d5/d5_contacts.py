@@ -40,12 +40,24 @@ def delete_contact(contacts):
     else:
         print("未找到联系人姓名")
 
+def select_contact(contacts):
+    selects = input("请输入查询人姓名：")
+    found = False
+    for k, v in contacts.items():
+        if selects in k:
+            found = True
+            print(k, '-', v)
+    if not found:
+        print("未找到联系人")
+
+
 contacts = load_contacts()
 
 while True:
     print("---------1、添加----------")
     print("---------2、查看----------")
     print("---------3、删除----------")
+    print("---------4、查询----------")
     print("---------0、退出----------")
     choice = input("输入你的选择:")
     if choice == '1':
@@ -54,6 +66,8 @@ while True:
         show_contacts(contacts)
     elif choice == '3':
         delete_contact(contacts)
+    elif choice == '4':
+        select_contact(contacts)
     elif choice == '0':
         save = input("是否保存通讯录？（y/n）")
         if save.lower() == 'y':
